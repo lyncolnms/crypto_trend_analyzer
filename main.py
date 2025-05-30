@@ -7,7 +7,7 @@ from utils import calculate_sma, calculate_ema
 def fetch_data(symbol="bitcoin", days=30):
     url = f"https://api.coingecko.com/api/v3/coins/{symbol}/market_chart"
     params = {
-        "vs_currency": "usd",
+        "vs_currency": "brl",
         "days": days,
         "interval": "daily"
     }
@@ -29,9 +29,9 @@ def main():
     plt.plot(df.index, df["price"], label="Preço")
     plt.plot(df.index, df["SMA_5"], label="SMA 5 dias")
     plt.plot(df.index, df["EMA_5"], label="EMA 5 dias")
-    plt.title("Tendência de Preço - Bitcoin (USD)")
+    plt.title("Tendência de Preço - Bitcoin (BRL)")
     plt.xlabel("Data")
-    plt.ylabel("Preço (USD)")
+    plt.ylabel("Preço (BRL)")
     plt.legend()
     plt.grid()
     plt.tight_layout()
