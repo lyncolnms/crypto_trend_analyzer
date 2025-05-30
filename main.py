@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import requests
 from datetime import datetime
+import pytz
 from utils import calculate_sma, calculate_ema
 
 def fetch_data(symbol="bitcoin", days=30):
@@ -16,7 +17,7 @@ def fetch_data(symbol="bitcoin", days=30):
 
     prices = data["prices"]
     df = pd.DataFrame(prices, columns=["timestamp", "price"])
-    df["timestamp"] = pd.to_datetime(df["timestamp"], unit='ms')
+    df["timestamp"] = pd.to_datetime(df["timestamp"], unit='ms').dt.tz_localize('UTC').dt.tz_convert('America/Sao_Paulo')
     df.set_index("timestamp", inplace=True)
     return df
 
@@ -34,6 +35,14 @@ def main():
     plt.ylabel("Preço (BRL)")
     plt.legend()
     plt.grid()
+    
+    # Format x-axis dates to dd/MM/yyyy
+    plt.gca().xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter('%d/%m/%Y'))
+    plt.gcf().autofmt_xdate()  # Rotate and align the tick labels
+    
+    # Format y-axis to R$ format
+    plt.gca().yaxis.set_major_formatter(plt.matplotlib.ticker.FuncFormatter(lambda x, p: f'R$ {x:,.2f}'.replace(',', '.')))
+    
     plt.tight_layout()
     plt.show()
 
